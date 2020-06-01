@@ -285,6 +285,10 @@ public abstract class EntityLiving extends BaseEntity implements EntityDamageabl
             // Used to check collisions with magma blocks
             Block block = this.getLevel().getLoadedBlock(this.getPosition().sub(0, 1, 0));
             if (block instanceof BlockMagma) block.onEntityCollide(this);
+
+            Block block1 = this.getLevel().getLoadedBlock(this.getPosition());
+            block1.onEntityCollide(this);
+
             return hasUpdate;
         }
     }
