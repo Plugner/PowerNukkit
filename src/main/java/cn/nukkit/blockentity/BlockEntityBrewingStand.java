@@ -2,6 +2,7 @@ package cn.nukkit.blockentity;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.api.PowerNukkitDifference;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBrewingStand;
 import cn.nukkit.block.BlockID;
@@ -13,12 +14,12 @@ import cn.nukkit.inventory.ContainerRecipe;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
+import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.ContainerSetDataPacket;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -181,6 +182,7 @@ public class BlockEntityBrewingStand extends BlockEntitySpawnable implements Inv
         return ingredients.contains(ingredient.getId());
     }
 
+    @PowerNukkitDifference(info = "Using new method to play sounds", since = "1.4.0.0-PN")
     @Override
     public boolean onUpdate() {
         if (closed) {
@@ -251,7 +253,7 @@ public class BlockEntityBrewingStand extends BlockEntitySpawnable implements Inv
                             }
                         }
                     }
-                    this.getLevel().addLevelSoundEvent(this, LevelSoundEventPacket.SOUND_POTION_BREWED);
+                    this.getLevel().addSound(this, Sound.RANDOM_POTION_BREWED);
 
                     ingredient.count--;
                     this.inventory.setIngredient(ingredient);

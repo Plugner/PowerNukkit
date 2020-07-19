@@ -1,15 +1,16 @@
 package cn.nukkit.item;
 
 import cn.nukkit.Player;
+import cn.nukkit.api.PowerNukkitDifference;
 import cn.nukkit.block.*;
 import cn.nukkit.event.player.PlayerBucketEmptyEvent;
 import cn.nukkit.event.player.PlayerBucketFillEvent;
 import cn.nukkit.event.player.PlayerItemConsumeEvent;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockFace.Plane;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.LevelSoundEventPacket;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
 
 /**
@@ -78,6 +79,7 @@ public class ItemBucket extends Item {
         return true;
     }
 
+    @PowerNukkitDifference(info = "Using new method to play sounds", since = "1.4.0.0-PN")
     @Override
     public boolean onActivate(Level level, Player player, Block block, Block target, BlockFace face, double fx, double fy, double fz) {
         Block targetBlock = Block.get(getDamageByTarget(this.meta));
@@ -116,9 +118,9 @@ public class ItemBucket extends Item {
                     }
 
                     if (target instanceof BlockLava) {
-                        level.addLevelSoundEvent(block, LevelSoundEventPacket.SOUND_BUCKET_FILL_LAVA);
+                        level.addSound(block, Sound.BUCKET_FILL_LAVA);
                     } else {
-                        level.addLevelSoundEvent(block, LevelSoundEventPacket.SOUND_BUCKET_FILL_WATER);
+                        level.addSound(block, Sound.BUCKET_FILL_WATER);
                     }
 
                     return true;
@@ -169,9 +171,9 @@ public class ItemBucket extends Item {
                 }
 
                 if (this.getDamage() == 10) {
-                    level.addLevelSoundEvent(block, LevelSoundEventPacket.SOUND_BUCKET_EMPTY_LAVA);
+                    level.addSound(block, Sound.BUCKET_EMPTY_LAVA);
                 } else {
-                    level.addLevelSoundEvent(block, LevelSoundEventPacket.SOUND_BUCKET_EMPTY_WATER);
+                    level.addSound(block, Sound.BUCKET_EMPTY_WATER);
                 }
 
                 return true;
