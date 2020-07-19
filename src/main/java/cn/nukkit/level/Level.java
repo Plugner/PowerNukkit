@@ -2060,7 +2060,7 @@ public class Level implements ChunkManager, Metadatable {
 
             if (!setBlockDestroy) {
                 BlockBreakEvent ev = new BlockBreakEvent(player, target, face, item, eventDrops, player.isCreative(),
-                        (player.lastBreak + breakTime * 1000) > System.currentTimeMillis());
+                        (Long.sum(player.lastBreak, (long)breakTime*1000)) > System.currentTimeMillis());
 
                 if (player.isSurvival() && !target.isBreakable(item)) {
                     ev.setCancelled();
@@ -2319,6 +2319,10 @@ public class Level implements ChunkManager, Metadatable {
             if (event.isCancelled()) {
                 return null;
             }
+        }
+
+        if(hand.getWaterloggingLevel() == 0 && hand.canBeFlowedInto() && (block instanceof BlockLiquid || block.getLevelBlockAtLayer(1) instanceof BlockLiquid)) {
+            return null;
         }
 
         boolean liquidMoved = false;
