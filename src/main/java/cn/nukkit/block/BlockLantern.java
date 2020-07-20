@@ -3,6 +3,8 @@ package cn.nukkit.block;
 import cn.nukkit.Player;
 import cn.nukkit.api.PowerNukkitOnly;
 import cn.nukkit.api.Since;
+import cn.nukkit.blockproperty.BlockProperties;
+import cn.nukkit.blockproperty.BooleanBlockProperty;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.item.ItemTool;
@@ -12,6 +14,9 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.BlockColor;
 
 public class BlockLantern extends BlockFlowable {
+
+    public static final BooleanBlockProperty HANGING = new BooleanBlockProperty("hanging", false);
+    public static final BlockProperties PROPERTIES = new BlockProperties(HANGING);
 
     public BlockLantern() {
         this(0);
