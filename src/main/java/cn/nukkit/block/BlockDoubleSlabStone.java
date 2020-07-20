@@ -77,17 +77,6 @@ public class BlockDoubleSlabStone extends BlockDoubleSlabBase {
     }
 
     @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            Item slab = toItem();
-            slab.setCount(2);
-            return new Item[]{ slab };
-        } else {
-            return new Item[0];
-        }
-    }
-
-    @Override
     public int getToolTier() {
         return ItemTool.TIER_WOODEN;
     }

@@ -1,6 +1,8 @@
 package cn.nukkit.block;
 
 import cn.nukkit.Player;
+import cn.nukkit.api.PowerNukkitOnly;
+import cn.nukkit.api.Since;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
 import cn.nukkit.item.ItemTool;
@@ -182,6 +184,18 @@ public class BlockLantern extends BlockFlowable {
     @Override
     public BlockColor getColor() {
         return BlockColor.IRON_BLOCK_COLOR;
+    }
+
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public boolean isHanging() {
+        return getBooleanValue(HANGING);
+    }
+
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public void setHanging(boolean hanging) {
+        setBooleanValue(HANGING, hanging);
     }
 
     @Override

@@ -63,19 +63,8 @@ public class BlockDoubleSlabRedSandstone extends BlockDoubleSlabBase {
     }
 
     @Override
-    public Item toItem() {
-        return getCurrentState().forItem().withBlockId(BlockID.RED_SANDSTONE_SLAB).asItemBlock();
-    }
-    
-    @Override
-    public Item[] getDrops(Item item) {
-        if (item.isPickaxe() && item.getTier() >= getToolTier()) {
-            Item slab = toItem();
-            slab.setCount(2);
-            return new Item[]{ slab };
-        } else {
-            return new Item[0];
-        }
+    public int getSingleSlabId() {
+        return RED_SANDSTONE_SLAB;
     }
 
     @Override
