@@ -429,8 +429,8 @@ public interface BlockID {
     //int WEEPING_VINES = 486;
     int CRIMSON_NYLIUM = 487;
     int WARPED_NYLIUM = 488;
-    //int BASALT = 489;
-    //int POLISHED_BASALT = 490; 
+    int BASALT = 489;
+    int POLISHED_BASALT = 490;
     int SOUL_SOIL = 491;
     //int SOUL_FIRE = 492;
     int NETHER_SPROUTS_BLOCK = 493; 
@@ -463,8 +463,8 @@ public interface BlockID {
     int WARPED_SLAB = 520;
     int CRIMSON_DOUBLE_SLAB = 521;
     int WARPED_DOUBLE_SLAB = 522;
-    //int SOUL_TORCH = 523;
-    //int SOUL_LANTERN = 524;
+    int SOUL_TORCH = 523;
+    int SOUL_LANTERN = 524;
     int NETHERITE_BLOCK = 525;
     //int ANCIENT_DERBIS = 526;
     //int RESPAWN_ANCHOR = 527;
@@ -481,7 +481,7 @@ public interface BlockID {
     int BLACKSTONE_DOUBLE_SLAB = 538;
     //int POLISHED_BLACKSTONE_BRICK_SLAB = 539;
     //int POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = 540;
-    //int CHAIN_BLOCK = 541;
+    int CHAIN_BLOCK = 541;
     //int TWISTING_VINES = 542;
     //int NETHER_GOLD_ORE = 543;
     //int CRYING_OBSIDIAN = 544;
