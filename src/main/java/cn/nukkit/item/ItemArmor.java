@@ -10,8 +10,7 @@ import cn.nukkit.nbt.tag.ByteTag;
 import cn.nukkit.nbt.tag.Tag;
 
 /**
- * author: MagicDroidX
- * Nukkit Project
+ * @author MagicDroidX (Nukkit Project)
  */
 abstract public class ItemArmor extends Item implements ItemDurable {
 

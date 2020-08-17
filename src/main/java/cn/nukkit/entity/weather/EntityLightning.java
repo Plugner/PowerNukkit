@@ -16,7 +16,8 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by boybook on 2016/2/27.
+ * @author boybook
+ * @since 2016/2/27
  */
 public class EntityLightning extends Entity implements EntityLightningStrike {
 

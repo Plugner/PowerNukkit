@@ -14,7 +14,10 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.EntityEventPacket;
+import cn.nukkit.network.protocol.LevelSoundEventPacket;
+import cn.nukkit.utils.DyeColor;
 
 import java.util.Random;
 
@@ -29,6 +32,7 @@ public class EntityFirework extends Entity {
     private int lifetime;
     private Item firework;
 
+    @PowerNukkitDifference(info = "Will default to a black-creeper-face if the firework data is missing", since = "1.3.1.2-PN")
     public EntityFirework(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
 
@@ -44,6 +48,27 @@ public class EntityFirework extends Entity {
             firework = NBTIO.getItemHelper(nbt.getCompound("FireworkItem"));
         } else {
             firework = new ItemFirework();
+        }
+
+        if (!firework.hasCompoundTag() || !firework.getNamedTag().contains("Fireworks")) {
+            CompoundTag tag = firework.getNamedTag();
+            if (tag == null) {
+                tag = new CompoundTag();
+            }
+
+            CompoundTag ex = new CompoundTag()
+                    .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.BLACK.getDyeData()})
+                    .putByteArray("FireworkFade", new byte[]{})
+                    .putBoolean("FireworkFlicker", false)
+                    .putBoolean("FireworkTrail", false)
+                    .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.CREEPER_SHAPED.ordinal());
+
+            tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+                    .putList(new ListTag<CompoundTag>("Explosions").add(ex))
+                    .putByte("Flight", 1)
+            );
+
+            firework.setNamedTag(tag);
         }
 
         this.setDataProperty(new NBTEntityData(Entity.DATA_DISPLAY_ITEM, firework.getNamedTag()));
@@ -89,7 +114,7 @@ public class EntityFirework extends Entity {
             float f = (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.yaw = (float) (Math.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
-            this.pitch = (float) (Math.atan2(this.motionY, (double) f) * (180D / Math.PI));
+            this.pitch = (float) (Math.atan2(this.motionY, f) * (180D / Math.PI));
 
 
             if (this.fireworkAge == 0) {

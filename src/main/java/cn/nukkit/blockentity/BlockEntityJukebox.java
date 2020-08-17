@@ -119,4 +119,9 @@ public class BlockEntityJukebox extends BlockEntitySpawnable {
         return getDefaultCompound(this, JUKEBOX)
                 .putCompound("RecordItem", NBTIO.putItemHelper(this.recordItem));
     }
+
+    @Override
+    public void onBreak() {
+        dropItem();
+    }
 }
