@@ -1,0 +1,8 @@
+# To build powernukkit, insert "gp build" and to initialize server use "gp init".
+# To go to GitPod, go to https://gitpod.io/#https://github.com/Plugner/PowerNukkit/
+
+tasks:
+  - init: cd target && java -jar powernukkit*-shaded.jar
+  - build: bash mvnw clean install
+ports:
+  - port: 19132
