@@ -2,7 +2,6 @@
 # To go to GitPod, go to https://gitpod.io/#https://github.com/PowerNukkit/PowerNukkit/
 
 tasks:
-  - init: cd target && java -jar powernukkit*-shaded.jar
-  - build: bash mvnw clean install
+  - init: bash mvnw clean install
 ports:
   - port: 19132
