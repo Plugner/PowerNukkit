@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class EntityHumanType extends EntityCreature implements InventoryHolder {
+public abstract class EntityHumanType extends EntityCreature implements InventoryHolder {
 
     protected PlayerInventory inventory;
     protected PlayerEnderChestInventory enderChestInventory;
@@ -198,9 +199,9 @@ public abstract class EntityHumanType extends EntityCreature implements Inventor
                 if (armor.isUnbreakable()) {
                     continue;
                 }
-
+                
                 armor.setDamage(armor.getDamage() + 1);
-
+                 
                 if (armor.getDamage() >= armor.getMaxDurability()) {
                     inventory.setArmorItem(slot, new ItemBlock(Block.get(BlockID.AIR)));
                 } else {

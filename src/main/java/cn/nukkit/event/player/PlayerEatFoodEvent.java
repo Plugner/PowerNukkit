@@ -1,6 +1,7 @@
 package cn.nukkit.event.player;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.item.food.Food;
@@ -20,6 +21,8 @@ public class PlayerEatFoodEvent extends PlayerEvent implements Cancellable {
     public PlayerEatFoodEvent(Player player, Food food) {
         this.player = player;
         this.food = food;
+        Server.getInstance().broadcastMessage("Hooked PlayerEatFoodEvent");
+
     }
 
     public Food getFood() {
