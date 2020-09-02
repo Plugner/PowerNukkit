@@ -45,6 +45,7 @@ public class BlockRedstoneWire extends BlockFlowable {
 
     @Override
     public boolean place(Item item, Block block, Block target, BlockFace face, double fx, double fy, double fz, Player player) {
+        // Fix issue #167
         if (target.canBeReplaced() || target.getName().equals("Sunflower")) {
             Location loc = null;
             if(target instanceof BlockGrassPath || target instanceof BlockTallGrass) {
