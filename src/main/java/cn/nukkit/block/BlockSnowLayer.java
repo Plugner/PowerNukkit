@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemSnowball;
+import cn.nukkit.item.ItemSnowlayer;
 import cn.nukkit.item.ItemTool;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
@@ -95,7 +96,7 @@ public class BlockSnowLayer extends BlockFallable {
 
     @Override
     public Item toItem() {
-        return new ItemSnowball();
+        return new ItemSnowlayer();
     }
 
     @Override
