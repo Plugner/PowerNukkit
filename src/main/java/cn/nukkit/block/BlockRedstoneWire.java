@@ -6,6 +6,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemRedstone;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Location;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.BlockFace.Plane;
 import cn.nukkit.math.Vector3;
@@ -44,8 +45,19 @@ public class BlockRedstoneWire extends BlockFlowable {
 
     @Override
     public boolean place(Item item, Block block, Block target, BlockFace face, double fx, double fy, double fz, Player player) {
-        if (target.canBeReplaced()) {
+        // Fix issue #167
+        if (target.canBeReplaced() || target.getName().equals("Sunflower")) {
+            Location loc = null;
+            if(target instanceof BlockGrassPath || target instanceof BlockTallGrass) {
+                loc = target.getLocation().clone();
+            }else if(target.getName().equals("Sunflower")) {
+                loc = target.getLocation().subtract(0,1,0);
+            }
+
+            target.getLocation().getLevel().setBlock(loc,Block.get(BlockID.AIR));
             block = target;
+            this.getLevel().setBlock(loc, this, true, true);
+            return true;
         }
 
         if (!canBePlacedOn(block.down())) {
