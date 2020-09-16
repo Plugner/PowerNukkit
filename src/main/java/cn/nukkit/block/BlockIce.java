@@ -1,6 +1,8 @@
 package cn.nukkit.block;
 
 import cn.nukkit.Server;
+import cn.nukkit.api.PowerNukkitOnly;
+import cn.nukkit.api.Since;
 import cn.nukkit.event.block.BlockFadeEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemTool;
@@ -13,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * author: MagicDroidX
- * Nukkit Project
+ * @author MagicDroidX (Nukkit Project)
  */
 public class BlockIce extends BlockTransparent {
 
@@ -61,6 +62,12 @@ public class BlockIce extends BlockTransparent {
                 return super.onBreak(item);
             }
             return this.getLevel().setBlock(this, Block.get(BlockID.WATER), true);
+            Enchantment silkTouch = item.getEnchantment(Enchantment.ID_SILK_TOUCH);
+            if(silkTouch != null && silkTouch.getLevel() > 0) {
+                return this.getLevel().setBlock(this, Block.get(BlockID.AIR), true);
+            }else{
+                return this.getLevel().setBlock(this, Block.get(BlockID.WATER), true);
+            }
         } else {
             return super.onBreak(item);
         }
@@ -96,5 +103,12 @@ public class BlockIce extends BlockTransparent {
     @Override
     public boolean canSilkTouch() {
         return true;
+    }
+
+    @Since("1.4.0.0-PN")
+    @PowerNukkitOnly
+    @Override
+    public int getLightFilter() {
+        return 2;
     }
 }

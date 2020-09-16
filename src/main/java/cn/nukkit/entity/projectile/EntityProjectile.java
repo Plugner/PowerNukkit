@@ -1,5 +1,7 @@
 package cn.nukkit.entity.projectile;
 
+import cn.nukkit.api.PowerNukkitOnly;
+import cn.nukkit.api.Since;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBell;
 import cn.nukkit.entity.Entity;
@@ -7,12 +9,8 @@ import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.data.LongEntityData;
 import cn.nukkit.entity.item.EntityEndCrystal;
 import cn.nukkit.event.block.BellRingEvent;
-import cn.nukkit.event.entity.EntityCombustByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
-import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.event.entity.*;
 import cn.nukkit.event.entity.EntityDamageEvent.DamageCause;
-import cn.nukkit.event.entity.ProjectileHitEvent;
 import cn.nukkit.level.MovingObjectPosition;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.AxisAlignedBB;
@@ -24,8 +22,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * author: MagicDroidX
- * Nukkit Project
+ * @author MagicDroidX (Nukkit Project)
  */
 public abstract class EntityProjectile extends Entity {
 
@@ -122,6 +119,14 @@ public abstract class EntityProjectile extends Entity {
         this.namedTag.putShort("Age", this.age);
     }
 
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    protected void updateMotion() {
+        this.motionY -= this.getGravity();
+        this.motionX *= 1 - this.getDrag();
+        this.motionZ *= 1 - this.getDrag();
+    }
+    
     @Override
     public boolean onUpdate(int currentTick) {
         if (this.closed) {
@@ -141,9 +146,7 @@ public abstract class EntityProjectile extends Entity {
             MovingObjectPosition movingObjectPosition = null;
 
             if (!this.isCollided) {
-                this.motionY -= this.getGravity();
-                this.motionX *= 1 - this.getDrag();
-                this.motionZ *= 1 - this.getDrag();
+                updateMotion();
             }
 
             Vector3 moveVector = new Vector3(this.x + this.motionX, this.y + this.motionY, this.z + this.motionZ);
