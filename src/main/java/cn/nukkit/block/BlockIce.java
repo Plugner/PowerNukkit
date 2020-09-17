@@ -1,6 +1,6 @@
 package cn.nukkit.block;
 
-import cn.nukkit.Server;
+import cn.nukkit.api.PowerNukkitDifference;
 import cn.nukkit.api.PowerNukkitOnly;
 import cn.nukkit.api.Since;
 import cn.nukkit.event.block.BlockFadeEvent;
@@ -9,10 +9,6 @@ import cn.nukkit.item.ItemTool;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
 import cn.nukkit.utils.BlockColor;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -52,25 +48,16 @@ public class BlockIce extends BlockTransparent {
         return ItemTool.TYPE_PICKAXE;
     }
 
+    @PowerNukkitDifference(since = "1.4.0.0-PN", info = "Will not create water when it is above air")
     @Override
     public boolean onBreak(Item item) {
-        if (this.getLevel().getDimension() != Level.DIMENSION_NETHER) {
-            Enchantment enchantment = item.getEnchantment(Enchantment.ID_SILK_TOUCH);
-            int level = 0;
-            if (enchantment != null || (this.getLocation().clone().subtract(0,1,0).getLevelBlock() instanceof BlockAir) ) {
-                level = enchantment.getLevel();
-                return super.onBreak(item);
-            }
-            Enchantment silkTouch = item.getEnchantment(Enchantment.ID_SILK_TOUCH);
-            if(silkTouch != null && silkTouch.getLevel() > 0) {
-                return this.getLevel().setBlock(this, Block.get(BlockID.AIR), true);
-            }else{
-                return this.getLevel().setBlock(this, Block.get(BlockID.WATER), true);
-            }
-
-        } else {
+        if (level.getDimension() == Level.DIMENSION_NETHER 
+                || item.getEnchantmentLevel(Enchantment.ID_SILK_TOUCH) > 0 
+                || down().getId() == BlockID.AIR) {
             return super.onBreak(item);
         }
+        
+        return level.setBlock(this, Block.get(BlockID.WATER), true);
     }
 
     @Override
