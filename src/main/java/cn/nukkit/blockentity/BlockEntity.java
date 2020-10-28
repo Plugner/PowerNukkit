@@ -60,7 +60,13 @@ public abstract class BlockEntity extends Position {
     public static final String DROPPER = "Dropper";
     @PowerNukkitOnly
     @Since("1.4.0.0-PN")
-    public static final String NETHER_REACTOR = "NetherReactor"; 
+    public static final String NETHER_REACTOR = "NetherReactor";
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public static final String LODESTONE = "Lodestone";
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public static final String TARGET = "Target";
 
 
     public static long count = 1;
@@ -105,7 +111,11 @@ public abstract class BlockEntity extends Position {
         }
 
         this.initBlockEntity();
-
+        
+        if (closed) {
+            throw new IllegalStateException("Could not create the entity "+getClass().getName()+", the initializer closed it on construction.");
+        }
+        
         this.chunk.addBlockEntity(this);
         this.getLevel().addBlockEntity(this);
     }
@@ -239,8 +249,17 @@ public abstract class BlockEntity extends Position {
         chunk.setChanged();
 
         if (this.getLevelBlock().getId() != BlockID.AIR) {
-            this.level.updateComparatorOutputLevel(this);
+            this.level.updateComparatorOutputLevelSelective(this, isObservable());
         }
+    }
+
+    /**
+     * Indicates if an observer blocks that are looking at this block should blink when {@link #setDirty()} is called.
+     */
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public boolean isObservable() {
+        return true;
     }
 
     public String getName() {

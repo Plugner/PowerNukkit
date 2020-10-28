@@ -19,6 +19,7 @@ import cn.nukkit.utils.Faceable;
 import lombok.extern.log4j.Log4j2;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,6 +64,13 @@ public abstract class BlockWallBase extends BlockTransparentMeta implements Bloc
 
     @Override
     public boolean isSolid() {
+        return false;
+    }
+
+    @Since("1.3.0.0-PN")
+    @PowerNukkitOnly
+    @Override
+    public boolean isSolid(BlockFace side) {
         return false;
     }
 
@@ -116,18 +124,18 @@ public abstract class BlockWallBase extends BlockTransparentMeta implements Bloc
         }
         int offset = face.getXOffset();
         if (offset < 0) {
-            return boundingBox.getMinX() < MIN_POST_BB /*&& MIN_POST_BB <= boundingBox.getMaxX()*/
+            return boundingBox.getMinX() < MIN_POST_BB
                     && boundingBox.getMinZ() < MIN_POST_BB && MAX_POST_BB < boundingBox.getMaxZ();
         } else if (offset > 0) {
-            return /*boundingBox.getMinX() <= MAX_POST_BB &&*/ MAX_POST_BB < boundingBox.getMaxX()
+            return MAX_POST_BB < boundingBox.getMaxX()
                     && MAX_POST_BB < boundingBox.getMaxZ() && boundingBox.getMinZ() < MAX_POST_BB;
         } else {
             offset = face.getZOffset();
             if (offset < 0) {
-                return boundingBox.getMinZ() < MIN_POST_BB /*&& MIN_POST_BB <= boundingBox.getMaxZ()*/
+                return boundingBox.getMinZ() < MIN_POST_BB
                         && boundingBox.getMinX() < MIN_POST_BB && MIN_POST_BB < boundingBox.getMaxX();
             } else if (offset > 0) {
-                return /*boundingBox.getMinZ() <= MAX_POST_BB &&*/ MAX_POST_BB < boundingBox.getMaxZ()
+                return MAX_POST_BB < boundingBox.getMaxZ()
                         && MAX_POST_BB < boundingBox.getMaxX() && boundingBox.getMinX() < MAX_POST_BB;
             }
         }
@@ -176,7 +184,7 @@ public abstract class BlockWallBase extends BlockTransparentMeta implements Bloc
 
     @PowerNukkitDifference(info = "Will be placed on the right state", since = "1.3.0.0-PN")
     @Override
-    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, Player player) {
+    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         autoConfigureState();
         return super.place(item, block, target, face, fx, fy, fz, player);
     }
@@ -299,6 +307,7 @@ public abstract class BlockWallBase extends BlockTransparentMeta implements Bloc
             case SKULL_BLOCK:
             case CONDUIT:
             case STANDING_BANNER:
+            case TURTLE_EGG:
                 return true;
 
             // End rods make it become a post if it's placed on the wall

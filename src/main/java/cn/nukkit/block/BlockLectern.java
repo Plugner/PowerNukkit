@@ -109,7 +109,10 @@ public class BlockLectern extends BlockTransparentMeta implements Faceable, Bloc
     public BlockFace getBlockFace() {
         return BlockFace.fromHorizontalIndex(getDamage() & 0b11);
     }
-    
+
+    @Override
+    @PowerNukkitOnly
+    @Since("1.3.0.0-PN")
     public void setBlockFace(BlockFace face) {
         int horizontalIndex = face.getHorizontalIndex();
         if (horizontalIndex >= 0) {
@@ -118,7 +121,7 @@ public class BlockLectern extends BlockTransparentMeta implements Faceable, Bloc
     }
     
     @Override
-    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, Player player) {
+    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         setBlockFace(player != null ? player.getDirection().getOpposite() : BlockFace.SOUTH);
         return BlockEntityHolder.setBlockAndCreateEntity(this) != null;
     }

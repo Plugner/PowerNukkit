@@ -1,8 +1,13 @@
 package cn.nukkit.blockentity;
 
 import cn.nukkit.Player;
+import cn.nukkit.api.PowerNukkitOnly;
+import cn.nukkit.api.Since;
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockHopper;
 import cn.nukkit.block.BlockID;
+import cn.nukkit.blockproperty.CommonBlockProperties;
+import cn.nukkit.blockstate.BlockState;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.event.inventory.InventoryMoveItemEvent;
@@ -12,6 +17,7 @@ import cn.nukkit.item.ItemBlock;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -30,6 +36,10 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements Inventory
     public int transferCooldown = 8;
 
     private AxisAlignedBB pickupArea;
+    
+    private boolean disabled;
+    
+    private final BlockVector3 temporalVector = new BlockVector3();
 
     public BlockEntityHopper(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -52,10 +62,15 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements Inventory
         }
 
         this.pickupArea = new SimpleAxisAlignedBB(this.x, this.y, this.z, this.x + 1, this.y + 2, this.z + 1);
-
+        
         this.scheduleUpdate();
 
         super.initBlockEntity();
+
+        Block block = getBlock();
+        if (block instanceof BlockHopper) {
+            disabled = !((BlockHopper)block).isEnabled();
+        }
     }
 
     @Override
@@ -150,37 +165,57 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements Inventory
         return inventory;
     }
 
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     @Override
     public boolean onUpdate() {
         if (this.closed) {
             return false;
         }
+        
+        if (isOnTransferCooldown()) {
+            this.transferCooldown--;
+            return true;
+        }
+        
+        if (disabled) {
+        	return false;
+        }
 
-        this.transferCooldown--;
+        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this, BlockFace.UP));
 
-        if (!this.isOnTransferCooldown()) {
-            if ((this.level.getBlockDataAt(getFloorX(), getFloorY(), getFloorZ()) & 0x08) == 8) { //is hopper disabled?
-                return false;
-            }
+        boolean changed = pushItems();
 
-            BlockEntity blockEntity = this.level.getBlockEntity(this.up());
+        if (blockEntity instanceof InventoryHolder) {
+            changed = pullItems() || changed;
+        } else {
+            changed = pickupItems() || changed;
+        }
 
-            boolean changed = pushItems();
-
-            if (blockEntity instanceof InventoryHolder) {
-                changed = pullItems() || changed;
-            } else {
-                changed = pickupItems() || changed;
-            }
-
-            if (changed) {
-                this.setTransferCooldown(8);
-                setDirty();
-            }
+        if (changed) {
+            this.setTransferCooldown(8);
+            setDirty();
         }
 
 
         return true;
+    }
+
+    @Since("1.4.0.0-PN")
+    @PowerNukkitOnly
+    @Override
+    public boolean isObservable() {
+        return false;
     }
 
     public boolean pullItems() {
@@ -188,7 +223,7 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements Inventory
             return false;
         }
 
-        BlockEntity blockEntity = this.level.getBlockEntity(this.up());
+        BlockEntity blockEntity = this.level.getBlockEntity(temporalVector.setComponentsAdding(this, BlockFace.UP));
         //Fix for furnace outputs
         if (blockEntity instanceof BlockEntityFurnace) {
             FurnaceInventory inv = ((BlockEntityFurnace) blockEntity).getInventory();
@@ -327,10 +362,17 @@ public class BlockEntityHopper extends BlockEntitySpawnable implements Inventory
             return false;
         }
 
-        BlockEntity be = this.level.getBlockEntity(this.getSide(BlockFace.fromIndex(this.level.getBlockDataAt(this.getFloorX(), this.getFloorY(), this.getFloorZ()))));
-
-        if (be instanceof BlockEntityHopper && this.getBlock().getDamage() == 0 || !(be instanceof InventoryHolder))
+        BlockState levelBlockState = getLevelBlockState();
+        if (levelBlockState.getBlockId() != BlockID.HOPPER_BLOCK) {
             return false;
+        }
+        
+        BlockFace side = levelBlockState.getPropertyValue(CommonBlockProperties.FACING_DIRECTION);
+        BlockEntity be = this.level.getBlockEntity(temporalVector.setComponentsAdding(this, side));
+
+        if (be instanceof BlockEntityHopper && levelBlockState.isDefaultState() || !(be instanceof InventoryHolder)) {
+            return false;
+        }
 
         InventoryMoveItemEvent event;
 

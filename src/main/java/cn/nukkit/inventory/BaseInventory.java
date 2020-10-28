@@ -10,6 +10,7 @@ import cn.nukkit.event.entity.EntityInventoryChangeEvent;
 import cn.nukkit.event.inventory.InventoryOpenEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
+import cn.nukkit.item.ItemID;
 import cn.nukkit.network.protocol.InventoryContentPacket;
 import cn.nukkit.network.protocol.InventorySlotPacket;
 
@@ -331,7 +332,7 @@ public abstract class BaseInventory implements Inventory {
             }
         }
 
-        return itemSlots.toArray(new Item[0]);
+        return itemSlots.toArray(Item.EMPTY_ARRAY);
     }
 
     @Override
@@ -367,7 +368,7 @@ public abstract class BaseInventory implements Inventory {
             }
         }
 
-        return itemSlots.toArray(new Item[0]);
+        return itemSlots.toArray(Item.EMPTY_ARRAY);
     }
 
     @Override
@@ -458,6 +459,15 @@ public abstract class BaseInventory implements Inventory {
             ((BlockEntity) holder).setDirty();
         }
 
+        if (before.getId() == ItemID.LODESTONE_COMPASS || getItem(index).getId() == ItemID.LODESTONE_COMPASS) {
+            if (holder instanceof Player) {
+                ((Player) holder).updateTrackingPositions(true);
+            }
+
+            getViewers().forEach(p-> p.updateTrackingPositions(true));
+        }
+        
+
         if (this.listeners != null) {
             for (InventoryListener listener : listeners) {
                 listener.onInventoryChanged(this, before, index);
@@ -539,7 +549,7 @@ public abstract class BaseInventory implements Inventory {
 
     @Override
     public void sendContents(Collection<Player> players) {
-        this.sendContents(players.toArray(new Player[0]));
+        this.sendContents(players.toArray(Player.EMPTY_ARRAY));
     }
 
     @Override
@@ -566,7 +576,7 @@ public abstract class BaseInventory implements Inventory {
 
     @Override
     public void sendSlot(int index, Collection<Player> players) {
-        this.sendSlot(index, players.toArray(new Player[0]));
+        this.sendSlot(index, players.toArray(Player.EMPTY_ARRAY));
     }
 
     @Override

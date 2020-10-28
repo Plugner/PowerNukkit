@@ -10,6 +10,7 @@ import cn.nukkit.item.ItemTool;
 import cn.nukkit.math.BlockFace;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author MagicDroidX (Nukkit Project)
@@ -80,19 +81,19 @@ public abstract class BlockSlab extends BlockTransparentMeta {
     @PowerNukkitOnly
     @Override
     public boolean isSolid(BlockFace side) {
-        return side == BlockFace.UP && (getDamage() & 0x08) == 0x08 || side == BlockFace.DOWN && (getDamage() & 0x08) != 0x08;
+        return side == BlockFace.UP && isOnTop() || side == BlockFace.DOWN && !isOnTop();
     }
 
     @Override
-    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, Player player) {
+    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         setOnTop(false);
         if (face == BlockFace.DOWN) {
             if (target instanceof BlockSlab && target.getBooleanValue(TOP_SLOT_PROPERTY) && isSameType((BlockSlab) target)) {
-                this.getLevel().setBlock(target, getCurrentState().withBlockId(doubleSlab).getBlock(), true);
+                this.getLevel().setBlock(target, getCurrentState().withBlockId(doubleSlab).getBlock(target), true);
 
                 return true;
             } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(), true);
+                this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(target), true);
 
                 return true;
             } else {
@@ -100,11 +101,11 @@ public abstract class BlockSlab extends BlockTransparentMeta {
             }
         } else if (face == BlockFace.UP) {
             if (target instanceof BlockSlab && !target.getBooleanValue(TOP_SLOT_PROPERTY) && isSameType((BlockSlab) target)) {
-                this.getLevel().setBlock(target, getCurrentState().withBlockId(doubleSlab).getBlock(), true);
+                this.getLevel().setBlock(target, getCurrentState().withBlockId(doubleSlab).getBlock(target), true);
 
                 return true;
             } else if (block instanceof BlockSlab && isSameType((BlockSlab) block)) {
-                this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(), true);
+                this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(target), true);
 
                 return true;
             }
@@ -112,7 +113,7 @@ public abstract class BlockSlab extends BlockTransparentMeta {
         } else {
             if (block instanceof BlockSlab) {
                 if (isSameType((BlockSlab) block)) {
-                    this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(), true);
+                    this.getLevel().setBlock(block, getCurrentState().withBlockId(doubleSlab).getBlock(block), true);
 
                     return true;
                 }

@@ -1,5 +1,6 @@
 package cn.nukkit.math;
 
+import cn.nukkit.api.PowerNukkitDifference;
 import cn.nukkit.api.PowerNukkitOnly;
 import cn.nukkit.api.Since;
 
@@ -9,15 +10,30 @@ import java.math.BigInteger;
  * @author MagicDroidX (Nukkit Project)
  */
 public class NukkitMath {
+    private static final Byte ZERO_BYTE = 0;
+    private static final Integer ZERO_INTEGER = 0;
+    private static final Short ZERO_SHORT = 0;
+    private static final Long ZERO_LONG = 0L;
+
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public static boolean isZero(Number storage) {
+        return ZERO_BYTE.equals(storage)
+                || ZERO_INTEGER.equals(storage)
+                || ZERO_SHORT.equals(storage)
+                || ZERO_LONG.equals(storage)
+                || BigInteger.ZERO.equals(storage);
+    }
 
     public static int floorDouble(double n) {
         int i = (int) n;
         return n >= i ? i : i - 1;
     }
 
+    @PowerNukkitDifference(since = "1.4.0.0-PN", info = "Fixed math problem")
     public static int ceilDouble(double n) {
-        int i = (int) (n + 1);
-        return n >= i ? i : i - 1;
+        int i = (int) n;
+        return n > i ? i + 1 : i;
     }
 
     public static int floorFloat(float n) {
@@ -25,9 +41,10 @@ public class NukkitMath {
         return n >= i ? i : i - 1;
     }
 
+    @PowerNukkitDifference(since = "1.4.0.0-PN", info = "Fixed math problem")
     public static int ceilFloat(float n) {
-        int i = (int) (n + 1);
-        return n >= i ? i : i - 1;
+        int i = (int) n;
+        return n > i ? i + 1 : i;
     }
 
     public static int randomRange(NukkitRandom random) {
@@ -46,8 +63,10 @@ public class NukkitMath {
         return round(d, 0);
     }
 
+    @PowerNukkitDifference(since = "1.4.0.0-PN", info = "Optimized")
     public static double round(double d, int precision) {
-        return ((double) Math.round(d * Math.pow(10, precision))) / Math.pow(10, precision);
+        double pow = Math.pow(10, precision);
+        return ((double) Math.round(d * pow)) / pow;
     }
 
     public static double clamp(double value, double min, double max) {
@@ -68,6 +87,26 @@ public class NukkitMath {
         diffZ = Math.abs(diffZ);
 
         return Math.max(diffX, diffZ);
+    }
+
+    @PowerNukkitOnly
+    @Since("1.4.0.0-PN")
+    public static int bitLength(byte data) {
+        if (data < 0) {
+            return 32;
+        }
+
+        if (data == 0) {
+            return 1;
+        }
+
+        int bits = 0;
+        while (data != 0) {
+            data >>>= 1;
+            bits++;
+        }
+
+        return bits;
     }
 
     @PowerNukkitOnly

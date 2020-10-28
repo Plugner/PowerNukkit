@@ -7,6 +7,7 @@ import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityBell;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
+import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.event.block.BellRingEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemBlock;
@@ -21,6 +22,7 @@ import cn.nukkit.utils.BlockColor;
 import cn.nukkit.utils.Faceable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @PowerNukkitOnly
 public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEntityHolder<BlockEntityBell> {
@@ -265,34 +267,23 @@ public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEn
     }
 
     private boolean checkSupport(Block support, BlockFace attachmentFace) {
-        if (!support.isTransparent()) {
+        if (BlockLever.isSupportValid(support, attachmentFace)) {
             return true;
         }
-
-        if (support instanceof BlockGlass || support.getId() == BEACON) {
-            return true;
-        } else if (support instanceof BlockSlab) {
-            if (attachmentFace == BlockFace.UP) {
-                return (support.getDamage() & 0x8) == 0x8;
-            } else if (attachmentFace == BlockFace.DOWN) {
-                return (support.getDamage() & 0x8) == 0x0;
-            } else {
-                return false;
+        
+        if (attachmentFace == BlockFace.DOWN) {
+            switch (support.getId()) {
+                case CHAIN_BLOCK:
+                case HOPPER_BLOCK:
+                case IRON_BARS:
+                    return true;
+                default:
+                    return support instanceof BlockFence || support instanceof BlockWallBase;
             }
-        } else if (support instanceof BlockStairs) {
-            if (attachmentFace == BlockFace.UP) {
-                return (support.getDamage() & 0x4) == 0x4;
-            } else if (attachmentFace == BlockFace.DOWN) {
-                return (support.getDamage() & 0x4) == 0x0;
-            } else {
-                return false;
-            }
-        } else if (support.getId() == SCAFFOLDING || support instanceof BlockCauldron || support.getId() == HOPPER_BLOCK) {
+        }
+        
+        if (support instanceof BlockCauldron) {
             return attachmentFace == BlockFace.UP;
-        } else if (support instanceof BlockFence || support instanceof BlockWall) {
-            return attachmentFace == BlockFace.UP || attachmentFace == BlockFace.DOWN;
-        } else if (support instanceof BlockChain) {
-            return attachmentFace == BlockFace.DOWN;
         }
 
         return false;
@@ -322,7 +313,7 @@ public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEn
     }
 
     @Override
-    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, Player player) {
+    public boolean place(@Nonnull Item item, @Nonnull Block block, @Nonnull Block target, @Nonnull BlockFace face, double fx, double fy, double fz, @Nullable Player player) {
         if (block.canBeReplaced() && block.getId() != AIR && block.getId() != BUBBLE_COLUMN && !(block instanceof BlockLiquid)) {
             face = BlockFace.UP;
         }
@@ -337,7 +328,7 @@ public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEn
                 break;
             default:
                 setBlockFace(face);
-                if (block.getSide(face).isSolid()) {
+                if (checkSupport(block.getSide(face), face.getOpposite())) {
                     setAttachmentType(TYPE_ATTACHMENT_MULTIPLE);
                 } else {
                     setAttachmentType(TYPE_ATTACHMENT_SIDE);
@@ -349,11 +340,25 @@ public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEn
         return BlockEntityHolder.setBlockAndCreateEntity(this) != null;
     }
 
+    @Since("1.4.0.0-PN")
+    @PowerNukkitOnly
+    @Override
+    public boolean onProjectileHit(@Nonnull Entity projectile, @Nonnull Position position, @Nonnull Vector3 motion) {
+        ring(projectile, BellRingEvent.RingCause.PROJECTILE);
+        if (projectile.isOnFire() && projectile instanceof EntityArrow && level.getBlock(projectile).getId() == BlockID.AIR) {
+            level.setBlock(projectile, Block.get(BlockID.FIRE), true);
+        }
+        return true;
+    }
+
     @Override
     public BlockFace getBlockFace() {
         return BlockFace.fromHorizontalIndex(getDamage() & 0b11);
     }
 
+    @PowerNukkitOnly
+    @Since("1.3.0.0-PN")
+    @Override
     public void setBlockFace(BlockFace face) {
         if (face.getHorizontalIndex() == -1) {
             return;
@@ -407,6 +412,11 @@ public class BlockBell extends BlockTransparentMeta implements Faceable, BlockEn
     @Override
     public double getResistance() {
         return 25;
+    }
+
+    @Override
+    public int getToolTier() {
+        return ItemTool.TIER_WOODEN;
     }
 
     @Override
