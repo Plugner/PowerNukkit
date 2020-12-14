@@ -20,15 +20,12 @@ import cn.nukkit.utils.MinecartType;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Author: Adam Matthew [larryTheCoder]
- * <p>
- * Nukkit Project.
+ * @author Adam Matthew [larryTheCoder] (Nukkit Project)
  */
 public class EntityMinecartTNT extends EntityMinecartAbstract implements EntityExplosive {
 
     public static final int NETWORK_ID = 97;
     private int fuse;
-    private boolean activated = false;
 
     public EntityMinecartTNT(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -115,6 +112,11 @@ public class EntityMinecartTNT extends EntityMinecartAbstract implements EntityE
     @Override
     public void dropItem() {
         level.dropItem(this, new ItemMinecartTNT());
+    }
+
+    @Override
+    public String getName() {
+        return getType().getName();
     }
 
     @Override

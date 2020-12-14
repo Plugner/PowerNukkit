@@ -2,6 +2,8 @@ package cn.nukkit.item;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.api.PowerNukkitOnly;
+import cn.nukkit.api.Since;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
@@ -322,6 +324,128 @@ public class Item implements Cloneable, BlockID, ItemID {
             list[HONEYCOMB] = ItemHoneycomb.class; //736
             list[HONEY_BOTTLE] = ItemHoneyBottle.class; //737
 
+            list[NETHERITE_INGOT] = ItemIngotNetherite.class; //742
+            list[NETHERITE_SWORD] = ItemSwordNetherite.class; //743
+            list[NETHERITE_SHOVEL] = ItemShovelNetherite.class; //744
+            list[NETHERITE_PICKAXE] = ItemPickaxeNetherite.class; //745
+            list[NETHERITE_AXE] = ItemAxeNetherite.class; //746
+            list[NETHERITE_HOE] = ItemHoeNetherite.class; //747
+            list[NETHERITE_HELMET] = ItemHelmetNetherite.class; //748
+            list[NETHERITE_CHESTPLATE] = ItemChestplateNetherite.class; //749
+            list[NETHERITE_LEGGINGS] = ItemLeggingsNetherite.class; //750
+            list[NETHERITE_BOOTS] = ItemBootsNetherite.class; //751
+            list[NETHERITE_SCRAP] = ItemScrapNetherite.class; //752
+
+            list[RECORD_PIGSTEP] = ItemRecordPigstep.class; //759
+            
+            list[COD_BUCKET] = ItemBucketFishCod.class; //802
+            list[GHAST_SPAWN_EGG] = ItemSpawnEggGhast.class; //803
+            list[FLOWER_BANNER_PATTERN] = ItemBannerPatternFlower.class; //804
+            list[ZOGLIN_SPAWN_EGG] = ItemSpawnEggZoglin.class; //805
+            list[BLUE_DYE] = ItemDyeBlue.class; //806
+            list[SKULL_BANNER_PATTERN] = ItemBannerPatternSkull.class; //807
+            list[ENDERMITE_SPAWN_EGG] = ItemSpawnEggEndermite.class; //808
+            list[POLAR_BEAR_SPAWN_EGG] = ItemSpawnEggPolarBear.class; //809
+            list[WHITE_DYE] = ItemDyeWhite.class; //810
+            list[TROPICAL_FISH_BUCKET] = ItemBucketFishTropical.class; //811
+            list[CYAN_DYE] = ItemDyeCyan.class; //812
+            list[LIGHT_BLUE_DYE] = ItemDyeLightBlue.class; //813
+            list[LIME_DYE] = ItemDyeLime.class; //814
+            list[ZOMBIE_VILLAGER_SPAWN_EGG] = ItemSpawnEggZombieVillager.class; //815
+            list[STRAY_SPAWN_EGG] = ItemSpawnEggStray.class; //816
+            list[GREEN_DYE] = ItemDyeGreen.class; //817
+            list[EVOKER_SPAWN_EGG] = ItemSpawnEggEvoker.class; //818
+            list[WITHER_SKELETON_SPAWN_EGG] = ItemSpawnEggWitherSkeleton.class; //819
+            list[SALMON_BUCKET] = ItemBucketFishSalmon.class; //820
+            list[JUNGLE_BOAT] = ItemBoatJungle.class; //821
+            list[BLACK_DYE] = ItemDyeBlack.class; //822
+            list[MAGMA_CUBE_SPAWN_EGG] = ItemSpawnEggMagmaCube.class; //823
+            list[TROPICAL_FISH_SPAWN_EGG] = ItemSpawnEggTropicalFish.class; //824
+            list[VEX_SPAWN_EGG] = ItemSpawnEggVex.class; //825
+            list[FIELD_MASONED_BANNER_PATTERN] = ItemBannerPatternFieldMasoned.class; //826
+            list[WANDERING_TRADER_SPAWN_EGG] = ItemSpawnEggWanderingTrader.class; //827
+            list[BROWN_DYE] = ItemDyeBrown.class; //828
+            list[PANDA_SPAWN_EGG] = ItemSpawnEggPanda.class; //829
+            list[SILVERFISH_SPAWN_EGG] = ItemSpawnEggSilverfish.class; //830
+            list[OCELOT_SPAWN_EGG] = ItemSpawnEggOcelot.class; //831
+            list[LAVA_BUCKET] = ItemBucketLava.class; //832
+            list[SKELETON_SPAWN_EGG] = ItemSpawnEggSkeleton.class; //833
+            list[VILLAGER_SPAWN_EGG] = ItemSpawnEggVillager.class; //834
+            list[ELDER_GUARDIAN_SPAWN_EGG] = ItemSpawnEggElderGuardian.class; //835
+            list[ACACIA_BOAT] = ItemBoatAcacia.class; //836
+            list[OAK_BOAT] = ItemBoatOak.class; //837
+            list[PHANTOM_SPAWN_EGG] = ItemSpawnEggPhantom.class; //838
+            list[HOGLIN_SPAWN_EGG] = ItemSpawnEggHoglin.class; //839
+            list[DARK_OAK_BOAT] = ItemBoatDarkOak.class; //840
+            list[HUSK_SPAWN_EGG] = ItemSpawnEggHusk.class; //841
+            list[BLAZE_SPAWN_EGG] = ItemSpawnEggBlaze.class; //842
+            list[BORDURE_INDENTED_BANNER_PATTERN] = ItemBannerPatternBordureIndented.class; //843
+            list[MULE_SPAWN_EGG] = ItemSpawnEggMule.class; //844
+            list[CREEPER_BANNER_PATTERN] = ItemBannerPatternCreeper.class; //845
+            list[ZOMBIE_HORSE_SPAWN_EGG] = ItemSpawnEggZombieHorse.class; //846
+            list[BEE_SPAWN_EGG] = ItemSpawnEggBee.class; //847
+            list[COD_SPAWN_EGG] = ItemSpawnEggCod.class; //848
+            list[LLAMA_SPAWN_EGG] = ItemSpawnEggLlama.class; //849
+            list[FOX_SPAWN_EGG] = ItemSpawnEggFox.class; //850
+            list[PIGLIN_BRUTE_SPAWN_EGG] = ItemSpawnEggPiglinBrute.class; //851
+            list[PIG_SPAWN_EGG] = ItemSpawnEggPig.class; //852
+            list[COW_SPAWN_EGG] = ItemSpawnEggCow.class; //853
+            list[NPC_SPAWN_EGG] = ItemSpawnEggNpc.class; //854
+            list[SQUID_SPAWN_EGG] = ItemSpawnEggSquid.class; //855
+            list[MAGENTA_DYE] = ItemDyeMagenta.class; //856
+            list[RED_DYE] = ItemDyeRed.class; //857
+            list[WITCH_SPAWN_EGG] = ItemSpawnEggWitch.class; //858
+            list[INK_SAC] = ItemInkSac.class; //859
+            list[ORANGE_DYE] = ItemDyeOrange.class; //860
+            list[PILLAGER_SPAWN_EGG] = ItemSpawnEggPillager.class; //861
+            list[CAVE_SPIDER_SPAWN_EGG] = ItemSpawnEggCaveSpider.class; //862
+            list[BONE_MEAL] = ItemBoneMeal.class; //863
+            list[PUFFERFISH_BUCKET] = ItemBucketFishPufferfish.class; //864
+            list[BAT_SPAWN_EGG] = ItemSpawnEggBat.class; //865
+            list[SPRUCE_BOAT] = ItemBoatSpruce.class; //866
+            list[SPIDER_SPAWN_EGG] = ItemSpawnEggSpider.class; //867
+            list[PIGLIN_BANNER_PATTERN] = ItemBannerPatternPiglin.class; //868
+            list[RABBIT_SPAWN_EGG] = ItemSpawnEggRabbit.class; //869
+            list[MOJANG_BANNER_PATTERN] = ItemBannerPatternMojang.class; //870
+            list[PIGLIN_SPAWN_EGG] = ItemSpawnEggPiglin.class; //871
+            list[TURTLE_SPAWN_EGG] = ItemSpawnEggTurtle.class; //872
+            list[MOOSHROOM_SPAWN_EGG] = ItemSpawnEggMooshroom.class; //873
+            list[PUFFERFISH_SPAWN_EGG] = ItemSpawnEggPufferfish.class; //874
+            list[PARROT_SPAWN_EGG] = ItemSpawnEggParrot.class; //875
+            list[ZOMBIE_SPAWN_EGG] = ItemSpawnEggZombie.class; //876
+            list[WOLF_SPAWN_EGG] = ItemSpawnEggWolf.class; //877
+            list[GRAY_DYE] = ItemDyeGray.class; //878
+            list[COCOA_BEANS] = ItemCocoaBeans.class; //879
+            list[SKELETON_HORSE_SPAWN_EGG] = ItemSpawnEggSkeletonHorse.class; //880
+            list[SHEEP_SPAWN_EGG] = ItemSpawnEggSheep.class; //881
+            list[SLIME_SPAWN_EGG] = ItemSpawnEggSlime.class; //882
+            list[VINDICATOR_SPAWN_EGG] = ItemSpawnEggVindicator.class; //883
+            list[DROWNED_SPAWN_EGG] = ItemSpawnEggDrowned.class; //884
+            list[MILK_BUCKET] = ItemBucketMilk.class; //885
+            list[DOLPHIN_SPAWN_EGG] = ItemSpawnEggDolphin.class; //886
+            list[DONKEY_SPAWN_EGG] = ItemSpawnEggDonkey.class; //887
+            list[PURPLE_DYE] = ItemDyePurple.class; //888
+            list[BIRCH_BOAT] = ItemBoatBirch.class; //889
+            //list[DEBUG_STICK] = Item.Debug_stick.class; //890
+            list[ENDERMAN_SPAWN_EGG] = ItemSpawnEggEnderman.class; //891
+            list[CHICKEN_SPAWN_EGG] = ItemSpawnEggChicken.class; //892
+            list[SHULKER_SPAWN_EGG] = ItemSpawnEggShulker.class; //893
+            list[STRIDER_SPAWN_EGG] = ItemSpawnEggStrider.class; //894
+            list[ZOMBIE_PIGMAN_SPAWN_EGG] = ItemSpawnEggZombiePigman.class; //895
+            list[YELLOW_DYE] = ItemDyeYellow.class; //896
+            list[CAT_SPAWN_EGG] = ItemSpawnEggCat.class; //897
+            list[GUARDIAN_SPAWN_EGG] = ItemSpawnEggGuardian.class; //898
+            list[PINK_DYE] = ItemDyePink.class; //899
+            list[SALMON_SPAWN_EGG] = ItemSpawnEggSalmon.class; //900
+            list[CREEPER_SPAWN_EGG] = ItemSpawnEggCreeper.class; //901
+            list[HORSE_SPAWN_EGG] = ItemSpawnEggHorse.class; //902
+            list[LAPIS_LAZULI] = ItemLapisLazuli.class; //903
+            list[RAVAGER_SPAWN_EGG] = ItemSpawnEggRavager.class; //904
+            list[WATER_BUCKET] = ItemBucketWater.class; //905
+            list[LIGHT_GRAY_DYE] = ItemDyeLightGray.class; //906
+            list[CHARCOAL] = ItemCharcoal.class; //907
+            list[AGENT_SPAWN_EGG] = ItemSpawnEggAgent.class; //908
+
             for (int i = 0; i < 256; ++i) {
                 if (Block.list[i] != null) {
                     list[i] = Block.list[i];
@@ -450,7 +574,7 @@ public class Item implements Cloneable, BlockID, ItemID {
                 item.setCompoundTag(tags);
             }
 
-            return item;
+            return item.selfUpgrade();
         } catch (Exception e) {
             return new Item(id, meta, count).setCompoundTag(tags);
         }
@@ -464,7 +588,7 @@ public class Item implements Cloneable, BlockID, ItemID {
 
         Pattern integerPattern = Pattern.compile("^-?[1-9]\\d*$");
         if (integerPattern.matcher(b[0]).matches()) {
-            id = Integer.valueOf(b[0]);
+            id = Integer.parseInt(b[0]);
         } else {
             try {
                 id = BlockID.class.getField(b[0].toUpperCase()).getInt(null);
@@ -481,7 +605,7 @@ public class Item implements Cloneable, BlockID, ItemID {
         }
 
         //id = id & 0xFFFF;
-        if (b.length != 1) meta = Integer.valueOf(b[1]) & 0xFFFF;
+        if (b.length != 1) meta = Integer.parseInt(b[1]) & 0xFFFF;
 
         return get(id, meta);
     }
@@ -685,6 +809,11 @@ public class Item implements Cloneable, BlockID, ItemID {
         }
 
         return enchantments.toArray(new Enchantment[0]);
+    }
+
+    @Since("1.3.2.0-PN")
+    public boolean hasEnchantment(int id) {
+        return this.getEnchantment(id) != null;
     }
 
     public boolean hasCustomName() {
@@ -1021,6 +1150,16 @@ public class Item implements Cloneable, BlockID, ItemID {
     }
 
     /**
+     * When true, this item can be used to reduce growing times like a bone meal.
+     * @return {@code true} if it can act like a bone meal
+     */
+    @Since("1.3.2.0-PN")
+    @PowerNukkitOnly
+    public boolean isFertilizer() {
+        return false;
+    }
+
+    /**
      * Called when a player uses the item on air, for example throwing a projectile.
      * Returns whether the item was changed, for example count decrease or durability change.
      *
@@ -1030,6 +1169,12 @@ public class Item implements Cloneable, BlockID, ItemID {
      */
     public boolean onClickAir(Player player, Vector3 directionVector) {
         return false;
+    }
+
+    @PowerNukkitOnly
+    @Since("1.3.2.0-PN")
+    public Item selfUpgrade() {
+        return this;
     }
 
     @Override

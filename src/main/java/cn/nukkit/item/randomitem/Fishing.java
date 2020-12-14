@@ -2,8 +2,8 @@ package cn.nukkit.item.randomitem;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
+import cn.nukkit.math.NukkitMath;
 import cn.nukkit.potion.Potion;
-import cn.nukkit.utils.DyeColor;
 
 import static cn.nukkit.item.randomitem.RandomItem.*;
 
@@ -36,7 +36,7 @@ public final class Fishing {
     public static final Selector JUNK_STRING_ITEM = putSelector(new ConstantItemSelector(Item.STRING, JUNKS), 0.06F);
     public static final Selector JUNK_WATTER_BOTTLE = putSelector(new ConstantItemSelector(Item.POTION, Potion.NO_EFFECTS, JUNKS), 0.12F);
     public static final Selector JUNK_BONE = putSelector(new ConstantItemSelector(Item.BONE, JUNKS), 0.12F);
-    public static final Selector JUNK_INK_SAC = putSelector(new ConstantItemSelector(Item.DYE, DyeColor.BLACK.getDyeData(), 10, JUNKS), 0.012F);
+    public static final Selector JUNK_INK_SAC = putSelector(new ConstantItemSelector(Item.INK_SAC, 0, 10, JUNKS), 0.012F);
     public static final Selector JUNK_TRIPWIRE_HOOK = putSelector(new ConstantItemSelector(Item.TRIPWIRE_HOOK, JUNKS), 0.12F);
 
     public static Item getFishingResult(Item rod) {
@@ -53,20 +53,14 @@ public final class Fishing {
     }
 
     public static Item getFishingResult(int fortuneLevel, int lureLevel) {
-        float treasureChance = limitRange(0, 1, 0.05f + 0.01f * fortuneLevel - 0.01f * lureLevel);
-        float junkChance = limitRange(0, 1, 0.05f - 0.025f * fortuneLevel - 0.01f * lureLevel);
-        float fishChance = limitRange(0, 1, 1 - treasureChance - junkChance);
+        float treasureChance = NukkitMath.clamp(0.05f + 0.01f * fortuneLevel - 0.01f * lureLevel, 0, 1);
+        float junkChance = NukkitMath.clamp(0.05f - 0.025f * fortuneLevel - 0.01f * lureLevel, 0, 1);
+        float fishChance = NukkitMath.clamp(1 - treasureChance - junkChance, 0, 1);
         putSelector(FISHES, fishChance);
         putSelector(TREASURES, treasureChance);
         putSelector(JUNKS, junkChance);
         Object result = selectFrom(ROOT_FISHING);
         if (result instanceof Item) return (Item) result;
         return null;
-    }
-
-    private static float limitRange(float min, float max, float value) {
-        if (value >= max) return max;
-        if (value <= min) return min;
-        return value;
     }
 }

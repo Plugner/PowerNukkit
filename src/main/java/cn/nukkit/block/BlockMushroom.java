@@ -1,14 +1,15 @@
 package cn.nukkit.block;
 
 import cn.nukkit.Player;
+import cn.nukkit.event.level.StructureGrowEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.ListChunkManager;
 import cn.nukkit.level.generator.object.mushroom.BigMushroom;
 import cn.nukkit.level.particle.BoneMealParticle;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.utils.BlockColor;
-import cn.nukkit.utils.DyeColor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -50,7 +51,7 @@ public abstract class BlockMushroom extends BlockFlowable {
 
     @Override
     public boolean onActivate(Item item, Player player) {
-        if (item.getId() == Item.DYE && item.getDamage() == DyeColor.WHITE.getDyeData()) {
+        if (item.isFertilizer()) {
             if (player != null && (player.gamemode & 0x01) == 0) {
                 item.count--;
             }
@@ -70,7 +71,16 @@ public abstract class BlockMushroom extends BlockFlowable {
 
         BigMushroom generator = new BigMushroom(getType());
 
-        if (generator.generate(this.level, new NukkitRandom(), this)) {
+        ListChunkManager chunkManager = new ListChunkManager(this.level);
+        if (generator.generate(chunkManager, new NukkitRandom(), this)) {
+            StructureGrowEvent ev = new StructureGrowEvent(this, chunkManager.getBlocks());
+            this.level.getServer().getPluginManager().callEvent(ev);
+            if (ev.isCancelled()) {
+                return false;
+            }
+            for(Block block : ev.getBlockList()) {
+                this.level.setBlockAt(block.getFloorX(), block.getFloorY(), block.getFloorZ(), block.getId(), block.getDamage());
+            }
             return true;
         } else {
             this.level.setBlock(this, this, true, false);

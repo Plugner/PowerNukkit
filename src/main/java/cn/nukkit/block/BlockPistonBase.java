@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  */
 public abstract class BlockPistonBase extends BlockSolidMeta implements Faceable {
 
-    public boolean sticky = false;
+    public boolean sticky;
 
     public BlockPistonBase() {
         this(0);
